@@ -14,7 +14,7 @@ document.getElementById("quote").textContent =
 function go(page) {
   // 対応ページ一覧
   const routes = {
-    notes: "notes.html",
+    notes: "note.html",
     quiz: "quiz.html",
     memo: "memo.html"
   };
