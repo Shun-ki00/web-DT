@@ -148,3 +148,29 @@
       .switch-btn{ width: 40px; height: 40px; border-radius: 12px; }
       .switch-label{ right: 62px; }
     }
+
+    /* ================================
+   スマホでフォームとボタンが
+   被らないように調整
+================================ */
+
+/* switcher の横幅 + 余白分 */
+:root{
+  --switcher-space: 64px;
+}
+
+/* フォーム全体に右余白を作る */
+.form-wrap{
+  padding-right: calc(12px + var(--switcher-space));
+}
+
+/* さらに狭い画面では余白を少し増やす */
+@media (max-width: 480px){
+  :root{
+    --switcher-space: 72px;
+  }
+
+  .form-wrap{
+    padding-right: calc(12px + var(--switcher-space));
+  }
+}
