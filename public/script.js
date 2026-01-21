@@ -16,7 +16,7 @@ function go(page) {
   // 対応ページ一覧
   const routes = {
     notes: "noteHome.html",
-    quiz: "quiz.html",
+    quiz: "formsSwitcher.html",
     memo: "memo.html"
   };
 
