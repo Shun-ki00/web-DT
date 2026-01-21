@@ -1,41 +1,44 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-  <title>Web Controller</title>
-
-  <link rel="stylesheet" href="controller.css" />
+  <meta charset="UTF-8">
+  <title>Study Hub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-<script>
-navigator.vibrate(200);      // 200ms 振動
-navigator.vibrate([100,50,100]); // 振動→停止→振動
-</script>
-    
- <!-- 結果表示（HUD） -->
-  <div class="hud">
-    <div class="hud-title">INPUT</div>
-    <div id="hud-text" class="hud-text">Loading...</div>
+
+<header>
+  <h1>📘 Study Hub</h1>
+  <p id="quote">Loading...</p>
+</header>
+
+<main class="grid">
+  <div class="card" onclick="go('notes')">
+    <h2>📝 ノート</h2>
+    <p>授業まとめ・暗記用</p>
   </div>
 
-  <div class="controller">
-    <!-- 左：↑↓ -->
-    <div class="pad">
-      <button id="pad-up" class="pad-btn" aria-label="Up">↑</button>
-      <button id="pad-down" class="pad-btn" aria-label="Down">↓</button>
-    </div>
-
-    <!-- 右：Joystick -->
-    <div class="joystick">
-      <div id="joystick-frame" class="joystick-frame">
-        <div id="joystick-ball" class="joystick-ball"></div>
-      </div>
-    </div>
+  <div class="card" onclick="go('quiz')">
+    <h2>❓ テスト問題</h2>
+    <p>自作問題・確認用</p>
   </div>
 
+  <div class="card" onclick="go('memo')">
+    <h2>💡 メモ</h2>
+    <p>気づいたことを残す</p>
+  </div>
 
-  <script src="controller.js"></script>
+  <div class="card random" onclick="randomQuiz()">
+    <h2>🎲 ランダム問題</h2>
+    <p>気分で1問</p>
+  </div>
+</main>
+
+<footer>
+  <p id="timer">今日の勉強時間：0 分</p>
+</footer>
+
+<script src="script.js"></script>
 </body>
 </html>
