@@ -10,9 +10,22 @@ const quotes = [
 document.getElementById("quote").textContent =
   quotes[Math.floor(Math.random() * quotes.length)];
 
-/* ページ遷移（仮） */
+/* ページ遷移 */
 function go(page) {
-  alert(`${page} ページに移動（未実装）`);
+  // 対応ページ一覧
+  const routes = {
+    notes: "notes.html",
+    quiz: "quiz.html",
+    memo: "memo.html"
+  };
+
+  if (!routes[page]) {
+    alert("ページが見つかりません");
+    return;
+  }
+
+  // 画面遷移
+  window.location.href = routes[page];
 }
 
 /* ランダム問題 */

@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Study Note</title>
+  <style>
+    :root{
+      --bg:#0f172a;
+      --panel:#111827;
+      --ink:#e5e7eb;
+      --muted:#94a3b8;
+      --accent:#38bdf8;
+      --card:#1f2937;
+      --paper:#0b1220;
+      --line:rgba(56,189,248,0.12);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans JP", sans-serif;
+      background: radial-gradient(1200px 700px at 50% 0%, rgba(56,189,248,0.12), transparent 60%),
+                  var(--bg);
+      color:var(--ink);
+    }
+    header{
+      padding:16px 16px 8px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      max-width:1100px;
+      margin:0 auto;
+    }
+    header h1{
+      font-size:18px;
+      margin:0;
+      letter-spacing:0.2px;
+    }
+    header .hint{color:var(--muted); font-size:12px}
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+      padding:0 16px 20px;
+      display:grid;
+      grid-template-columns: 320px 1fr;
+      gap:14px;
+    }
+    @media (max-width: 900px){
+      .wrap{grid-template-columns:1fr}
+    }
+    .panel{
+      background: rgba(17,24,39,0.65);
+      border:1px solid rgba(148,163,184,0.18);
+      border-radius:18px;
+      padding:14px;
+      backdrop-filter: blur(10px);
+    }
+    .panel h2{font-size:14px; margin:0 0 10px; color:#cbd5e1}
+    .row{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+    label{font-size:12px; color:var(--muted)}
+    input[type="color"]{
+      width:38px; height:32px; border:none; background:transparent; padding:0; cursor:pointer;
+    }
+    input[type="range"]{width:160px}
+    .btn{
+      appearance:none; border:none; cursor:pointer;
+      background: rgba(56,189,248,0.15);
+      border:1px solid rgba(56,189,248,0.35);
+      color: var(--ink);
+      padding:10px 12px;
+      border-radius:14px;
+      font-weight:600;
+      transition: transform .12s ease, background .12s ease;
+      font-size:13px;
+      user-select:none;
+    }
+    .btn:hover{transform: translateY(-1px); background: rgba(56,189,248,0.22);}
+    .btn.secondary{
+      background: rgba(148,163,184,0.10);
+      border:1px solid rgba(148,163,184,0.22);
+    }
+    .btn.danger{
+      background: rgba(248,113,113,0.12);
+      border:1px solid rgba(248,113,113,0.35);
+    }
+    .pill{
+      padding:6px 10px;
+      border-radius:999px;
+      background: rgba(148,163,184,0.10);
+      border:1px solid rgba(148,163,184,0.18);
+      color:#cbd5e1;
+      font-size:12px;
+    }
+    .divider{
+      height:1px;
+      background: rgba(148,163,184,0.14);
+      margin:12px 0;
+    }
+
+    /* paper area */
+    .paper{
+      background: linear-gradient(transparent 31px, var(--line) 32px),
+                  linear-gradient(90deg, transparent 31px, rgba(56,189,248,0.08) 32px),
+                  var(--paper);
+      background-size: 100% 32px, 32px 100%, auto;
+      border:1px solid rgba(148,163,184,0.18);
+      border-radius:18px;
+      overflow:hidden;
+      position:relative;
+      min-height: 520px;
+    }
+    .paperTop{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:12px 14px;
+      background: rgba(2,6,23,0.45);
+      border-bottom:1px solid rgba(148,163,184,0.14);
+    }
+    .paperTop input{
+      width:100%;
+      max-width: 520px;
+      background: rgba(148,163,184,0.10);
+      border:1px solid rgba(148,163,184,0.20);
+      color:var(--ink);
+      border-radius:12px;
+      padding:10px 12px;
+      outline:none;
+      font-size:13px;
+    }
+    .canvasWrap{
+      position:relative;
+      width:100%;
+      height: calc(100% - 56px);
+      min-height: 520px;
+    }
+    canvas{
+      width:100%;
+      height:100%;
+      display:block;
+      touch-action: none; /* スクロールより描画を優先 */
+      cursor: crosshair;
+    }
+    .toast{
+      position:fixed;
+      bottom:18px;
+      left:50%;
+      transform:translateX(-50%);
+      background: rgba(15,23,42,0.92);
+      border:1px solid rgba(148,163,184,0.22);
+      color:#e5e7eb;
+      padding:10px 14px;
+      border-radius:999px;
+      font-size:12px;
+      opacity:0;
+      pointer-events:none;
+      transition: opacity .18s ease, transform .18s ease;
+    }
+    .toast.show{opacity:1; transform:translateX(-50%) translateY(-2px);}
+    .small{font-size:12px;color:var(--muted);line-height:1.5}
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>📝 手書きノート</h1>
+      <div class="hint">指/ペンで書ける → 保存 → 次回復元（このブラウザ内）</div>
+    </div>
+    <span class="pill" id="status">未保存</span>
+  </header>
+
+  <div class="wrap">
+    <aside class="panel">
+      <h2>ツール</h2>
+
+      <div class="row" style="margin-bottom:10px;">
+        <label>ペン色</label>
+        <input id="color" type="color" value="#e5e7eb" />
+        <label>太さ</label>
+        <input id="size" type="range" min="1" max="24" value="4" />
+        <span class="pill" id="sizeLabel">4</span>
+      </div>
+
+      <div class="row" style="margin-bottom:10px;">
+        <button class="btn" id="penBtn">✍️ ペン</button>
+        <button class="btn secondary" id="eraserBtn">🧽 消しゴム</button>
+      </div>
+
+      <div class="divider"></div>
+
+      <h2>保存 / 復元</h2>
+      <div class="row" style="margin-bottom:10px;">
+        <button class="btn" id="saveBtn">💾 保存</button>
+        <button class="btn secondary" id="loadBtn">🔄 復元</button>
+      </div>
+
+      <div class="row" style="margin-bottom:10px;">
+        <button class="btn secondary" id="exportBtn">🖼️ PNGで書き出し</button>
+      </div>
+
+      <div class="row" style="margin-bottom:10px;">
+        <button class="btn danger" id="clearBtn">🗑️ 全消し</button>
+      </div>
+
+      <div class="divider"></div>
+      <h2>メモ</h2>
+      <p class="small">
+        ・保存はこの端末/このブラウザ内（localStorage）です。<br>
+        ・友達と共有したい場合は「PNGで書き出し」か、あとでサーバー保存（Node/DB）に拡張できます。
+      </p>
+    </aside>
+
+    <section class="paper">
+      <div class="paperTop">
+        <input id="title" placeholder="タイトル（例：歯の解剖：咬頭と溝）" maxlength="60" />
+      </div>
+      <div class="canvasWrap">
+        <canvas id="canvas"></canvas>
+      </div>
+    </section>
+  </div>
+
+  <div class="toast" id="toast">保存しました</div>
+
+  <script>
+    // ====== 設定 ======
+    const STORAGE_KEY = "study-note-v1";
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+
+    const colorEl = document.getElementById("color");
+    const sizeEl = document.getElementById("size");
+    const sizeLabel = document.getElementById("sizeLabel");
+    const titleEl = document.getElementById("title");
+    const statusEl = document.getElementById("status");
+    const toastEl = document.getElementById("toast");
+
+    const penBtn = document.getElementById("penBtn");
+    const eraserBtn = document.getElementById("eraserBtn");
+    const saveBtn = document.getElementById("saveBtn");
+    const loadBtn = document.getElementById("loadBtn");
+    const exportBtn = document.getElementById("exportBtn");
+    const clearBtn = document.getElementById("clearBtn");
+
+    let mode = "pen"; // "pen" | "eraser"
+    let drawing = false;
+    let dirty = false;
+    let last = { x: 0, y: 0, p: 0.5 };
+
+    function toast(msg){
+      toastEl.textContent = msg;
+      toastEl.classList.add("show");
+      setTimeout(()=>toastEl.classList.remove("show"), 1200);
+    }
+    function setStatus(text, accent=false){
+      statusEl.textContent = text;
+      statusEl.style.borderColor = accent ? "rgba(56,189,248,0.45)" : "rgba(148,163,184,0.18)";
+    }
+
+    // ====== Canvas Resize (retina対応) ======
+    function resizeCanvas(){
+      const dpr = Math.max(1, window.devicePixelRatio || 1);
+      const rect = canvas.getBoundingClientRect();
+
+      // 既存内容を退避
+      const prev = canvas.width && canvas.height ? canvas.toDataURL("image/png") : null;
+
+      canvas.width = Math.floor(rect.width * dpr);
+      canvas.height = Math.floor(rect.height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      // 背景（透明のままでもOK。紙っぽくするなら白で塗る）
+      // ctx.fillStyle = "#0b1220"; ctx.fillRect(0,0,rect.width,rect.height);
+
+      if (prev){
+        const img = new Image();
+        img.onload = () => {
+          ctx.drawImage(img, 0, 0, rect.width, rect.height);
+        };
+        img.src = prev;
+      }
+    }
+    window.addEventListener("resize", resizeCanvas);
+
+    // ====== Drawing utils ======
+    function setTool(){
+      penBtn.style.background = mode === "pen" ? "rgba(56,189,248,0.22)" : "rgba(56,189,248,0.15)";
+      eraserBtn.style.background = mode === "eraser" ? "rgba(148,163,184,0.18)" : "rgba(148,163,184,0.10)";
+      canvas.style.cursor = mode === "eraser" ? "cell" : "crosshair";
+    }
+
+    function getPoint(e){
+      const rect = canvas.getBoundingClientRect();
+      const touch = e.touches && e.touches[0];
+      const clientX = touch ? touch.clientX : e.clientX;
+      const clientY = touch ? touch.clientY : e.clientY;
+      const pressure = touch?.force ?? e.pressure ?? 0.5; // iOS/一部端末で有効
+      return {
+        x: (clientX - rect.left),
+        y: (clientY - rect.top),
+        p: (pressure && pressure > 0) ? pressure : 0.5
+      };
+    }
+
+    function beginStroke(pt){
+      drawing = true;
+      dirty = true;
+      last = pt;
+      ctx.beginPath();
+      ctx.moveTo(pt.x, pt.y);
+      setStatus("編集中…", true);
+    }
+
+    function strokeTo(pt){
+      if (!drawing) return;
+
+      // 筆圧っぽい：force が取れるなら少し反映
+      const base = Number(sizeEl.value);
+      const w = Math.max(1, base * (0.6 + pt.p * 0.8));
+
+      ctx.lineJoin = "round";
+      ctx.lineCap = "round";
+      ctx.lineWidth = w;
+
+      if (mode === "eraser"){
+        ctx.globalCompositeOperation = "destination-out";
+        ctx.strokeStyle = "rgba(0,0,0,1)";
+      } else {
+        ctx.globalCompositeOperation = "source-over";
+        ctx.strokeStyle = colorEl.value;
+      }
+
+      ctx.lineTo(pt.x, pt.y);
+      ctx.stroke();
+
+      last = pt;
+    }
+
+    function endStroke(){
+      if (!drawing) return;
+      drawing = false;
+      ctx.closePath();
+      setStatus(dirty ? "未保存" : "保存済み");
+    }
+
+    // Pointer Events（ボタン押しながらでも描画が途切れにくい）
+    canvas.addEventListener("pointerdown", (e)=>{
+      e.preventDefault();
+      canvas.setPointerCapture(e.pointerId);
+      beginStroke(getPoint(e));
+    });
+    canvas.addEventListener("pointermove", (e)=>{
+      if (!drawing) return;
+      e.preventDefault();
+      strokeTo(getPoint(e));
+    });
+    canvas.addEventListener("pointerup", (e)=>{
+      e.preventDefault();
+      endStroke();
+    });
+    canvas.addEventListener("pointercancel", endStroke);
+
+    // ====== UI ======
+    sizeEl.addEventListener("input", ()=> sizeLabel.textContent = sizeEl.value);
+
+    penBtn.addEventListener("click", ()=>{ mode="pen"; setTool(); toast("ペン"); });
+    eraserBtn.addEventListener("click", ()=>{ mode="eraser"; setTool(); toast("消しゴム"); });
+
+    clearBtn.addEventListener("click", ()=>{
+      if (!confirm("全消しする？")) return;
+      const rect = canvas.getBoundingClientRect();
+      ctx.clearRect(0,0,rect.width,rect.height);
+      dirty = true;
+      setStatus("未保存");
+      toast("全消し");
+    });
+
+    function save(){
+      const data = {
+        title: titleEl.value ?? "",
+        // ここはキャンバスを画像として保存（簡単で確実）
+        image: canvas.toDataURL("image/png"),
+        savedAt: Date.now()
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      dirty = false;
+      setStatus("保存済み");
+      toast("保存しました");
+    }
+
+    function load(){
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw){
+        toast("保存データなし");
+        return;
+      }
+      const data = JSON.parse(raw);
+      titleEl.value = data.title ?? "";
+
+      const rect = canvas.getBoundingClientRect();
+      const img = new Image();
+      img.onload = () => {
+        ctx.clearRect(0,0,rect.width,rect.height);
+        ctx.drawImage(img, 0, 0, rect.width, rect.height);
+        dirty = false;
+        setStatus("保存済み");
+        toast("復元しました");
+      };
+      img.src = data.image;
+    }
+
+    saveBtn.addEventListener("click", save);
+    loadBtn.addEventListener("click", load);
+
+    exportBtn.addEventListener("click", ()=>{
+      // 背景を白にしたPNGが欲しい場合は一時的に合成してもOK
+      const a = document.createElement("a");
+      const name = (titleEl.value || "note").replace(/[\\\/:*?"<>|]/g, "_");
+      a.download = `${name}.png`;
+      a.href = canvas.toDataURL("image/png");
+      a.click();
+      toast("PNGを書き出し");
+    });
+
+    // ====== 初期化 ======
+    resizeCanvas();
+    setTool();
+    sizeLabel.textContent = sizeEl.value;
+
+    // 自動復元（欲しければON）
+    load();
+
+    // ページ離脱前の注意
+    window.addEventListener("beforeunload", (e)=>{
+      if (!dirty) return;
+      e.preventDefault();
+      e.returnValue = "";
+    });
+  </script>
+</body>
+</html>
