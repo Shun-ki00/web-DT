@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Forms Switcher</title>
+  <link rel="stylesheet" href="formsSwitcherStyle.css">
+</head>
+
+<body>
+
+  <!-- 右上ラベル（いま何のフォームか表示） -->
+  <div class="switch-label" id="formLabel">フォーム 1</div>
+
+  <!-- 右上固定スイッチ（JSで生成もできるけど今回はHTMLでもOK） -->
+  <div class="switcher" id="switcher"></div>
+
+  <div class="form-wrap">
+    <div class="frame-shell">
+      <div class="frame-overlay" id="overlay">
+        <div class="loading">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          <span>切り替え中…</span>
+        </div>
+      </div>
+
+      <iframe
+        id="formFrame"
+        src="https://docs.google.com/forms/d/e/1FAIpQLSd8glmPOr-wAVesjlUrIQJ4_9QLOpChcwedxyxVCIj12L_C6g/viewform?embedded=true"
+        loading="lazy"
+      >読み込んでいます…</iframe>
+    </div>
+  </div>
+
+<script src="formsSwitcher.js"></script>
+
+</body>
+</html>

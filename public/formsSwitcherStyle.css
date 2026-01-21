@@ -1,0 +1,150 @@
+:root{
+      --bg1:#0f172a;
+      --bg2:#020617;
+      --card:#1e293b;
+      --card2:#334155;
+      --text:#e5e7eb;
+      --muted:#94a3b8;
+      --accent:#38bdf8;
+      --border: rgba(148,163,184,0.18);
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      font-family: system-ui, "Noto Sans JP", sans-serif;
+      background: linear-gradient(180deg, var(--bg1), var(--bg2));
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .form-wrap{
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 18px 12px;
+    }
+
+    /* フォーム枠（いい感じに見せる） */
+    .frame-shell{
+      position: relative;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: rgba(30,41,59,0.55);
+      box-shadow: 0 18px 50px rgba(0,0,0,0.25);
+    }
+
+    /* トランジション用の覆い */
+    .frame-overlay{
+      position:absolute;
+      inset:0;
+      background: rgba(2,6,23,0.55);
+      backdrop-filter: blur(6px);
+      opacity: 0;
+      pointer-events: none;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transition: opacity .22s ease;
+    }
+    .frame-overlay.show{
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .loading{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      color: var(--text);
+      font-weight: 700;
+    }
+    .dot{
+      width:10px;height:10px;border-radius:50%;
+      background: var(--accent);
+      animation: bounce 0.9s infinite ease-in-out;
+    }
+    .dot:nth-child(2){ animation-delay: .12s; opacity:.85;}
+    .dot:nth-child(3){ animation-delay: .24s; opacity:.7;}
+    @keyframes bounce{
+      0%,80%,100%{ transform: translateY(0); }
+      40%{ transform: translateY(-6px); }
+    }
+
+    iframe{
+      width: 100%;
+      height: 900px;
+      border: 0;
+      display:block;
+      transform: translateY(0);
+      opacity: 1;
+      transition: opacity .22s ease, transform .22s ease;
+      background: #fff; /* Googleフォームの白背景対策 */
+    }
+    /* フェードアウト状態 */
+    iframe.fade-out{
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    /* 右上固定の数字アイコン（縦並び） */
+    .switcher{
+      position: fixed;
+      top: 14px;
+      right: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 1000;
+    }
+
+    .switch-btn{
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      border: 1px solid rgba(148,163,184,0.25);
+      background: rgba(30,41,59,0.65);
+      color: var(--text);
+      font-weight: 800;
+      cursor: pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .switch-btn:hover{
+      transform: translateY(-1px);
+      background: rgba(51,65,85,0.75);
+    }
+
+    .switch-btn.active{
+      border-color: rgba(56,189,248,0.70);
+      background: rgba(56,189,248,0.18);
+      box-shadow: 0 10px 25px rgba(56,189,248,0.18);
+    }
+
+    /* 小さいラベル（任意） */
+    .switch-label{
+      position: fixed;
+      top: 14px;
+      right: 68px;
+      z-index: 1000;
+      background: rgba(15,23,42,0.75);
+      border: 1px solid rgba(148,163,184,0.18);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 12px;
+      color: var(--muted);
+      max-width: 240px;
+      backdrop-filter: blur(10px);
+    }
+
+    @media (max-width: 480px){
+      iframe{ height: 820px; }
+      .switch-btn{ width: 40px; height: 40px; border-radius: 12px; }
+      .switch-label{ right: 62px; }
+    }
