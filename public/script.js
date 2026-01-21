@@ -1,4 +1,4 @@
-/* 今日の一言 */
+/* 今日の一言 
 const quotes = [
   "1問でもやったら勝ち",
   "今日は昨日よりえらい",
@@ -9,14 +9,15 @@ const quotes = [
 
 document.getElementById("quote").textContent =
   quotes[Math.floor(Math.random() * quotes.length)];
+*/
 
 /* ページ遷移 */
 function go(page) {
   // 対応ページ一覧
   const routes = {
-    notes: "note.html",
+    notes: "noteHome.html",
     quiz: "quiz.html",
-    memo: "note.html"
+    memo: "memo.html"
   };
 
   if (!routes[page]) {
