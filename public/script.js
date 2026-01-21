@@ -16,7 +16,7 @@ function go(page) {
   const routes = {
     notes: "note.html",
     quiz: "quiz.html",
-    memo: "memo.html"
+    memo: "note.html"
   };
 
   if (!routes[page]) {
