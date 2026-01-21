@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ノート一覧</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: linear-gradient(180deg, #0f172a, #020617);
+      color: #e5e7eb;
+    }
+
+    header {
+      padding: 24px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+    }
+
+    header p {
+      margin-top: 8px;
+      font-size: 0.95rem;
+      color: #94a3b8;
+    }
+
+    main {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+    }
+
+    .note-btn {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 18px;
+      padding: 20px 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .note-btn:hover {
+      transform: translateY(-4px);
+      background: #334155;
+    }
+
+    .note-btn h2 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+
+    .note-btn span {
+      display: block;
+      margin-top: 6px;
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.8rem;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>📚 ノート一覧</h1>
+  <p>見たい資料をタップして開く</p>
+</header>
+
+<main>
+  <div class="note-btn" onclick="go('note1-1.html')">
+    <h2>ノート 1-1</h2>
+    <span>埋没</span>
+  </div>
+
+  <div class="note-btn" onclick="go('note1-2.html')">
+    <h2>ノート 1-2</h2>
+    <span>フラックス</span>
+  </div>
+
+  <div class="note-btn" onclick="go('note1-3.html')">
+    <h2>ノート 1-3</h2>
+    <span>不完全な鋳造体</span>
+  </div>
+
+  <div class="note-btn" onclick="go('note1-4.html')">
+    <h2>ノート 1-4</h2>
+    <span>ろう付けに用いる熱源</span>
+  </div>
+
+  <div class="note-btn" onclick="go('note1-5.html')">
+    <h2>ノート 1-5</h2>
+    <span>熱処理</span>
+  </div>
+
+  <div class="note-btn" onclick="go('note1-6.html')">
+    <h2>ノート 1-6</h2>
+    <span>成形修復素材</span>
+  </div>
+
+  <div class="note-btn" onclick="go('note1-7.html')">
+    <h2>ノート 1-7</h2>
+    <span>バレル研磨</span>
+  </div>
+
+  <div class="note-btn" onclick="go('note1-8.html')">
+    <h2>ノート 1-8</h2>
+    <span>材料添加による仕上げ（コーティング）</span>
+  </div>
+
+  <div class="note-btn" onclick="go('note1-9.html')">
+    <h2>ノート 1-9</h2>
+    <span>従来法から改善点</span>
+  </div>
+
+  <div class="note-btn" onclick="go('note1-10.html')">
+    <h2>ノート 1-10</h2>
+    <span>セラミックス材料の特徴</span>
+  </div>
+</main>
+
+<script>
+  function go(page) {
+    window.location.href = page;
+  }
+</script>
+
+</body>
+</html>
